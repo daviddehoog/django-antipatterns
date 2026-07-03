@@ -22,8 +22,8 @@ result = <b>chain(</b>qs1, qs2<b>)</b></code></pre>
 # Why is it a problem?
 
 The main problem is that the result is *not* a `QuerySet`, but a `chain` object.
-This means that all methods offered by a `QuerySet` can no longer be used.
-Indeed, say that we want to filter the `Post`s with:
+This means that all methods offered by a `QuerySet` object can no longer be used.
+Say that we want to filter the `Post`s with:
 
 <pre class="python"><code>result.filter(author=<i>some_author</i>)</code></pre>
 
@@ -40,7 +40,7 @@ Another problem is that a `chain` can not be enumerated multiple times. Indeed:
 []
 ```
 
-This thus means if multiple `for` loops are used, only the first will iterate
+Therefore, if multiple `for` loops are used, only the first will iterate
 over the elements. We can work with <code>list(&hellip;)</code>,
 and thus use <code>result = list(chain(qs1, qs2))</code> to prevent this effect.
 

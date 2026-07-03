@@ -8,7 +8,7 @@ layers: [views, orm]
 solinks: []
 ---
 
-Often when one wants to determine how many objects are there in a Django model, they do so with:
+Often when one wants to determine how many objects there are in a Django model, they do so with:
 
 <pre class="python"><code>from .models import Project
 
@@ -16,7 +16,7 @@ def my_view(request):
     project_count = Project.objects.all().count()
     return render(request, '<i>name-of-some-template.html</i>', {'count': project_count})</code></pre>
 
-Or filter objects based on a given codition like so:
+Or filter objects based on a given condition like so:
 
 <pre class="python"><code>from .models import Project
 
@@ -24,12 +24,11 @@ def my_view(request):
     projects = Project.objects.all().filter(user=request.user)
     return render(request, '<i>name-of-some-template.html</i>', {'projects': projects})</code></pre>
 
-
 # Why is it a problem?
 
-When you call `all()` before `filter`, you essentially, are actually constructing your queryset twice with one not being needed here. `filter` returns a new queryset already that contains objects matching the condition so need of `all()`.
+When you call `all()` before `filter()`, you are actually constructing your queryset twice - when one will do. `filter()` returns a new queryset that alreadt contains objects matching the condition, so `all()` is not needed.
 
-Simillarly, calling `all()` before `count()` is not neccessary because `count()` already does a  `SELECT COUNT(*)` at the database level.
+Similarly, calling `all()` before `count()` is not neccessary, because `count()` already does a `SELECT COUNT(*)` at the database level.
 
 # What can be done to resolve the problem?
 
