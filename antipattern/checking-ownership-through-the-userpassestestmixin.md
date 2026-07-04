@@ -8,8 +8,8 @@ layers: [views]
 solinks: []
 ---
 
-In a view we often want to restrict access to edit an object, for example only
-the `author`s of the blog are allowed to edit their `Post`s.
+In a view we often want to restrict access to edit an object. For example, only
+the `author`s of the blog are allowed to edit their own `Post`s.
 
 One often checks this with a `UserPassesTestMixin`, which looks like:
 
@@ -25,9 +25,9 @@ class BlogEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 # Why is it a problem?
 
 It is not very efficient, because now the `self.get_object()` call will be done
-*twice*. Indeed, once for the `test_func`, and one in the
-<code>.get(&hellip;)</code> or <code>.post(&hellip;)</code> method, which also
-will fetch the object. This even gets worse because the `.author` call will make
+*twice*: once for the `test_func`, and once in the
+<code>.get(&hellip;)</code> or <code>.post(&hellip;)</code> method, which will also
+fetch the object. It gets worse because the `.author` call will make
 an extra query, since it is a `ForeignKey` (or `OneToOneField`), and thus will
 lazily load an extra object. If `get_object` is implemented as a simple database
 fetch, this thus means we make *two* unnecessary queries.
@@ -71,4 +71,4 @@ queries, and not the queries itself.
 Using the `UserPassesTestMixin`, by default it will return a *HTTP 403 Permission denied* response.
 This gives a hint that there *is* an object there. If we perform filtering, then
 a user that aims to edit the post of another user will see a *HTTP 404 Not Found*, which indicates
-that, for that user, this page, and therefore the `Blog` object does not exists.
+that, for that user, this page, and therefore the `Blog` object does not exist.
